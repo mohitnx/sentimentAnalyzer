@@ -11,19 +11,19 @@ const RightSection = () => {
       <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
         <div className="flex flex-col items-center text-sm h-full md:h-screen bg-lightBlack">
           <div className="text-gray-800 w-full md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col px-6">
-            <h1 className="text-4xl text-gray-100 font-semibold text-center mt-6">
-              Enter the link of the video you want to analyze
+            <h1 className="text-2xl text-gray-100 font-semibold text-center mt-6">
+              Youtube Video Analyzer
             </h1>
             {answerList.link !== "" && (
-              <div className="flex justify-start items-center mt-4">
-                <div className="bg-gray-200 p-3 rounded-lg max-w-[70%]">
-                  <p className="text-gray-800">{answerList.link}</p>
+              <div className="flex justify-start items-center mt-20">
+                <div className="bg-blue-500 p-3 rounded-lg w-[70%]">
+                  <p className="text-white">{answerList.link}</p>
                 </div>
               </div>
             )}
             {answerList.link !== "" && (
               <div className="flex justify-end items-center mt-4">
-                <div className="bg-black p-3 rounded-lg max-w-[70%]">
+                <div className="bg-black p-3 rounded-lg w-[70%]">
                   <p className="text-white">{demoAnswer}</p>
                 </div>
               </div>
