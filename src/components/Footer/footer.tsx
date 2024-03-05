@@ -1,12 +1,42 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  HistoryState,
+  addToHistory,
+  currentRequest,
+} from "../../store/chatHistory/chatHistory.reducer";
 
-const Footer = ({ onTextChange }: { onTextChange: any }) => {
+const Footer = () => {
+  const dispatch = useDispatch();
   const [text, setText] = useState("");
 
   const handleTextChange = (event: any) => {
     const newText = event.target.value;
     setText(newText);
-    onTextChange(newText); // Call the parent component's function to update the text
+  };
+
+  //add validation that the text filed is not empty
+  const handleSubmitRequest = (event: React.FormEvent) => {
+    event.preventDefault();
+    var currentdate = new Date();
+    const datetime =
+      currentdate.getDate() +
+      "/" +
+      (currentdate.getMonth() + 1) +
+      "/" +
+      currentdate.getFullYear() +
+      " " +
+      currentdate.getHours() +
+      ":" +
+      currentdate.getMinutes();
+    const dataToSend: HistoryState = {
+      date: datetime,
+      link: text,
+      analysis: "This part comes from api later",
+    };
+    dispatch(currentRequest(dataToSend));
+    dispatch(addToHistory(dataToSend));
+    setText("");
   };
 
   return (
@@ -18,16 +48,18 @@ const Footer = ({ onTextChange }: { onTextChange: any }) => {
               <div>userIcon</div>
             </div>
           </div>
-          <div className="flex flex-col w-full py-2 pl-3 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white rounded-md bg-[rgba(64,65,79,var(--tw-bg-opacity))]">
+          <div className="flex w-full py-2 pl-3 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-slate-300 dark:border-gray-900/50 text-black rounded-md bg-[rgba(64,65,79,var(--tw-bg-opacity))]">
             <textarea
-              tabIndex={0}
-              rows={4}
-              className="m-0 w-full resize-none border-0 bg-transparent p-0 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent outline-none overflow-y-hidden h-[23px]"
+              placeholder="enter a valid link"
+              className="m-0 w-full resize-none border-0 bg-transparent p-0 pr-20 focus:ring-0 outline-none overflow-y-hidden h-[90px]"
               value={text}
-              onChange={handleTextChange} // Handle text change
+              onChange={handleTextChange}
             ></textarea>
-            <button className="absolute p-1 rounded-md text-gray-400 bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-black">
-              <div>analyze</div>
+            <button
+              onClick={handleSubmitRequest}
+              className="absolute p-4 rounded-md mb-4 text-gray-400 bottom-1.5 right-1 md:bottom-2.5 md:right-2 bg-black hover:bg-slate-700"
+            >
+              Send
             </button>
           </div>
         </div>
