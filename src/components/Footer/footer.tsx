@@ -9,13 +9,13 @@ import {
 const Footer = () => {
   const dispatch = useDispatch();
   const [text, setText] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleTextChange = (event: any) => {
-    const newText = event.target.value;
-    setText(newText);
+  const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(event.target.value);
+    setErrorMessage(""); // Clear error message when text changes
   };
 
-  //add validation that the text filed is not empty
   const handleSubmitRequest = (event: React.FormEvent) => {
     event.preventDefault();
     var currentdate = new Date();
@@ -29,11 +29,38 @@ const Footer = () => {
       currentdate.getHours() +
       ":" +
       currentdate.getMinutes();
+
+    let videoId = null;
+    const youtubeRegex =
+      /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const match = text.match(youtubeRegex);
+
+    if (match) {
+      videoId = match[1];
+      if (text.includes("/shorts/")) {
+        setErrorMessage(
+          "Shorts links are currently not supported. Please provide a regular YouTube video link."
+        );
+        return;
+      }
+      if (text.includes("&list=")) {
+        setErrorMessage(
+          "A playlist link was provided. Only the first video will be considered."
+        );
+      }
+    } else {
+      setErrorMessage(
+        "Invalid YouTube URL. Please provide a valid YouTube video link."
+      );
+      return;
+    }
+
     const dataToSend: HistoryState = {
       date: datetime,
-      link: text,
+      link: videoId,
       analysis: "This part comes from api later",
     };
+
     dispatch(currentRequest(dataToSend));
     dispatch(addToHistory(dataToSend));
     setText("");
@@ -62,6 +89,7 @@ const Footer = () => {
               Send
             </button>
           </div>
+          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         </div>
       </form>
     </div>
