@@ -3,13 +3,19 @@ import {
   HistoryState,
   currentRequest,
 } from "../../store/chatHistory/chatHistory.reducer";
+import { useNavigate } from "react-router-dom";
 
 const LeftSection = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleIndividualRequest = (current: HistoryState) => {
     dispatch(currentRequest(current));
   };
   const answerList = useSelector((state: any) => state.history.history);
+  const handleLogout = () => {
+    localStorage.setItem("isAuthenticated", "false");
+    navigate("/login", { replace: true });
+  };
   return (
     <div className="bg-black md:fixed md:inset-y-0 md:flex md:w-[260px] md:flex-col">
       <div className="flex h-full min-h-0 flex-col">
@@ -31,7 +37,9 @@ const LeftSection = () => {
                 </div>
               ))}
             </div>
-            <button className="text-white mt-4">Logout</button>
+            <button className="text-white mt-4" onClick={handleLogout}>
+              Logout
+            </button>
           </nav>
         </div>
       </div>

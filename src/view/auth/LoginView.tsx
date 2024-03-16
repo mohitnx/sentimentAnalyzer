@@ -1,31 +1,30 @@
 import { useFormik } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import { AuthDataType, loginUser } from "../../api/auth/authAPI";
 
 const validationSchema = yup.object({
-  email: yup
-    .string()
-    .email("Invalid email format")
-    .required("Email is required"),
-  password: yup
-    .string()
-    .min(5, "Password must be at least 5 characters")
-    .required("Password is required"),
+  username: yup.string().required("Username is required"),
+  password: yup.string().required("Password is required"),
 });
 
 const LoginView = () => {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      email: "",
+      username: "",
       password: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values, helpers) => {
-      const data = {
-        email: values.email,
-        password: values.password,
+    onSubmit: async (values, helpers) => {
+      const data: AuthDataType = {
+        pass1: values.password,
+        username: values.username,
       };
-      console.log("data", data);
+      const statusCode = await loginUser(data);
+      if (statusCode === 200) {
+        navigate("/dashboard", { replace: true });
+      }
       helpers.resetForm({
         values,
       });
@@ -47,13 +46,13 @@ const LoginView = () => {
               <div className="w-[100%] pb-[24px]">
                 <input
                   title=""
-                  placeholder="Email"
+                  placeholder="username"
                   className="mt-1 p-2 w-full border rounded-md bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  {...formik.getFieldProps("email")}
+                  {...formik.getFieldProps("username")}
                 />
-                {formik.touched.email && formik.errors.email ? (
+                {formik.touched.username && formik.errors.username ? (
                   <div className="text-red-500 text-[14px] px-2">
-                    {formik.errors.email}
+                    {formik.errors.username}
                   </div>
                 ) : null}
               </div>

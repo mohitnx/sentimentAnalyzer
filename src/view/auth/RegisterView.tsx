@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import { AuthDataType, registerUser } from "../../api/auth/authAPI";
 
 const validationSchema = yup.object({
   firstName: yup.string().required("First Name is required"),
@@ -21,6 +22,7 @@ const validationSchema = yup.object({
 });
 
 const RegisterView = () => {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -31,12 +33,23 @@ const RegisterView = () => {
       confirmPassword: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values, helpers) => {
-      const data = {
+    onSubmit: async (values, helpers) => {
+      const data: AuthDataType = {
+        fname: values.firstName,
+        lname: values.lastName,
         email: values.email,
-        password: values.password,
+        username: values.username,
+        pass1: values.password,
+        pass2: values.password,
       };
-      console.log("data", data);
+      const statusCode = await registerUser(data);
+      statusCode === 200;
+      {
+        alert(
+          "Account Created Successfully. Now use the same credentails to login"
+        );
+        navigate("/login", { replace: true });
+      }
       helpers.resetForm({
         values,
       });
@@ -149,7 +162,7 @@ const RegisterView = () => {
                 <div className="flex items-center justify-center">
                   <div className="flex items-center mt-[40px]">
                     <p className="mr-2 text-white">Already have an account?</p>
-                    <Link to={"/register"}>
+                    <Link to={"/login"}>
                       <span className="text-blue-500 text-[16px] font-[400] select-none">
                         Login
                       </span>
