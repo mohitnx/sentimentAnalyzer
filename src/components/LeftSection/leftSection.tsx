@@ -11,6 +11,10 @@ const LeftSection = () => {
   const handleIndividualRequest = (current: HistoryState) => {
     dispatch(currentRequest(current));
   };
+  //answerList will be the list from backend instead of this..so when
+  //bakcekn fixed for hisotry..remove addToHisotry from backend and use api resonse for add hisotry here
+
+  //also instead of addToHositry use currentRequest in footer section
   const answerList = useSelector((state: any) => state.history.history);
   const handleLogout = () => {
     localStorage.setItem("isAuthenticated", "false");
@@ -28,12 +32,11 @@ const LeftSection = () => {
             <div className="flex flex-col flex-1 overflow-y-auto">
               {answerList.map((item: any) => (
                 <div
-                  key={item.date}
+                  key={item.videoLink + Math.random()}
                   onClick={() => handleIndividualRequest(item)}
                   className="justify-between py-3 px-3 rounded-md text-white text-sm mb-2 border border-white/20 hover:bg-lightBlack hover:cursor-pointer"
                 >
-                  <p className="truncate w-[200px]">{item.link}</p>
-                  <p className="text-[11px] text-gray-300">{item?.date}</p>
+                  <p className="truncate w-[200px]">{item?.videoLink}</p>
                 </div>
               ))}
             </div>

@@ -4,7 +4,6 @@ import Footer from "../Footer/footer";
 const RightSection = () => {
   const answerList = useSelector((state: any) => state.history.activeRequest);
   console.log(answerList);
-  const demoAnswer = "this is a demo answer";
 
   return (
     <div className="flex h-full flex-1 flex-col md:pl-[260px]">
@@ -14,17 +13,17 @@ const RightSection = () => {
             <h1 className="text-2xl text-gray-100 font-semibold text-center mt-6">
               Youtube Video Analyzer
             </h1>
-            {answerList.link !== "" && (
+            {answerList.videoLink !== "" && (
               <div className="flex justify-start items-center mt-20">
                 <div className="bg-blue-500 p-3 rounded-lg w-[70%]">
-                  <p className="text-white">{answerList.link}</p>
+                  <p className="text-white">{answerList?.videoLink}</p>
                 </div>
               </div>
             )}
-            {answerList.link !== "" && (
+            {answerList.videoLink !== "" && (
               <div className="flex justify-end items-center mt-4">
                 <div className="bg-black p-3 rounded-lg w-[70%]">
-                  <p className="text-white">{demoAnswer}</p>
+                  <p className="text-white">{answerList?.analysis}</p>
                 </div>
               </div>
             )}

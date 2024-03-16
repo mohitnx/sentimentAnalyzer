@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface HistoryState {
-  date: string;
-  link: string;
+  videoLink: string;
+  commentCount: number | null;
   analysis: string;
 }
 export interface HistoryStateList {
@@ -12,8 +12,8 @@ export interface HistoryStateList {
 
 const initialState: HistoryStateList = {
   activeRequest: {
-    date: "",
-    link: "",
+    videoLink: "",
+    commentCount: null,
     analysis: "",
   },
   history: [],

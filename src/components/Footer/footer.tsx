@@ -7,6 +7,7 @@ import {
   getSentiment,
 } from "../../api/dashboard/dashboardAPI";
 import { useNavigate } from "react-router-dom";
+import { addToHistory } from "../../store/chatHistory/chatHistory.reducer";
 
 const validationSchema = Yup.object({
   text: Yup.string()
@@ -70,6 +71,12 @@ const Footer = () => {
       }
 
       console.log(message);
+      const addToHistoryObject = {
+        videoLink: videoId,
+        commentCount: values.numberOfComments,
+        analysis: message,
+      };
+      dispatch(addToHistory(addToHistoryObject));
     },
   });
 
