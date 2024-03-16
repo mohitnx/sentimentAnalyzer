@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { AuthDataType, loginUser } from "../../api/auth/authAPI";
+import { AuthDataType, loginUser, tempAPI } from "../../api/auth/authAPI";
 
 const validationSchema = yup.object({
   username: yup.string().required("Username is required"),
@@ -23,6 +23,7 @@ const LoginView = () => {
       };
       const statusCode = await loginUser(data);
       if (statusCode === 200) {
+        localStorage.setItem("username", values.username);
         navigate("/dashboard", { replace: true });
       }
       helpers.resetForm({
@@ -30,6 +31,11 @@ const LoginView = () => {
       });
     },
   });
+
+  //testing only
+  const testingTempAPI = () => {
+    tempAPI();
+  };
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -79,6 +85,9 @@ const LoginView = () => {
                   Login
                 </button>
               </div>
+              {/* testing */}
+              <button onClick={testingTempAPI}>testing</button>
+              {/* testing */}
               <div>
                 <div className="flex items-center justify-center">
                   <div className="flex items-center mt-[40px]">

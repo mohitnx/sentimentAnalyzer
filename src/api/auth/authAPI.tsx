@@ -68,3 +68,34 @@ export const loginUser = async (data: AuthDataType) => {
     alert("There was a problem with the login operation:" + error);
   }
 };
+
+//for testing only
+export const tempAPI = async () => {
+  try {
+    const response = await fetch(`${baseUrl}/auth/checklogin`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      //parse response body as a js object
+      const errorData = await response.json();
+      const errorMessage =
+        errorData && errorData.message
+          ? errorData.message
+          : "Unknown error occurred";
+      alert(
+        "Login failed with status " +
+          response.status +
+          "\nMessage: " +
+          errorMessage
+      );
+    } else {
+      localStorage.setItem("isAuthenticated", "true");
+      return response.status;
+    }
+  } catch (error) {
+    alert("There was a problem with the login operation:" + error);
+  }
+};

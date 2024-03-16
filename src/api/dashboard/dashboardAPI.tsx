@@ -4,6 +4,7 @@ export interface SentimentDataType {
   videoID: string;
   apiKey: string;
   numberofcomments: string;
+  username: string;
 }
 
 export const getSentiment = async (data: SentimentDataType) => {

@@ -35,7 +35,10 @@ const Footer = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      if (localStorage.getItem("isAuthenticated") !== "true") {
+      if (
+        localStorage.getItem("isAuthenticated") !== "true" &&
+        localStorage.getItem("username") !== null
+      ) {
         alert("Please login first");
         navigate("/login", { replace: true });
         return;
@@ -48,10 +51,12 @@ const Footer = () => {
       if (match) {
         videoId = match[1];
       }
+
       const data: SentimentDataType = {
         videoID: videoId || "",
         apiKey: values.apiKey,
         numberofcomments: values.numberOfComments.toString(),
+        username: localStorage.getItem("username") as string,
       };
       const response = await getSentiment(data);
       console.log(response, "api response");

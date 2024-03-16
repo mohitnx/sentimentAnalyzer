@@ -17,7 +17,7 @@ const LeftSection = () => {
   //also instead of addToHositry use currentRequest in footer section
   const answerList = useSelector((state: any) => state.history.history);
   const handleLogout = () => {
-    localStorage.setItem("isAuthenticated", "false");
+    localStorage.clear();
     navigate("/login", { replace: true });
   };
   return (
