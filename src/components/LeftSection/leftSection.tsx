@@ -4,22 +4,49 @@ import {
   currentRequest,
 } from "../../store/chatHistory/chatHistory.reducer";
 import { useNavigate } from "react-router-dom";
+import { GetHisotryDataType, getHistory } from "../../api/dashboard/dashboardAPI";
+import { useEffect, useState } from "react";
+
+
+interface HisotryReuslt {
+  videoid: string;
+  positive: string;
+  negative: string;
+  neutral: string;
+}
+
 
 const LeftSection = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleIndividualRequest = (current: HistoryState) => {
-    dispatch(currentRequest(current));
-  };
-  //answerList will be the list from backend instead of this..so when
-  //bakcekn fixed for hisotry..remove addToHisotry from backend and use api resonse for add hisotry here
-
-  //also instead of addToHositry use currentRequest in footer section
-  const answerList = useSelector((state: any) => state.history.history);
+  // const handleIndividualRequest = (current: HistoryState) => {
+  //   dispatch(currentRequest(current));
+  // };
+  // const answerList = useSelector((state: any) => state.history.history);
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login", { replace: true });
   };
+  const [answerList, setAnswerList] = useState<any[]>([]);
+  useEffect(() => {
+    const username = localStorage.getItem("username") as string;
+    const data: GetHisotryDataType = {
+      username: username
+    };
+  
+    getHistory(data)
+      .then((response) => {
+        if (response?.response && Array.isArray(response?.response)) {
+          setAnswerList(response?.response);
+        } else {
+          console.error("Invalid response format:", response?.response);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching history:", error);
+      });
+  }, []);
+
   return (
     <div className="bg-black md:fixed md:inset-y-0 md:flex md:w-[260px] md:flex-col">
       <div className="flex h-full min-h-0 flex-col">
@@ -30,13 +57,13 @@ const LeftSection = () => {
             </div>
             {/* making a scrollable area...flex-1 takes all the space betn hisotry and logout, overflow y gives scroll bar */}
             <div className="flex flex-col flex-1 overflow-y-auto">
-              {answerList.map((item: any) => (
+              {answerList.length > 0 && answerList.map((item) => (
                 <div
-                  key={item.videoLink + Math.random()}
-                  onClick={() => handleIndividualRequest(item)}
+                  // key={item.videoID}
+                  // onClick={() => handleIndividualRequest(item)}
                   className="justify-between py-3 px-3 rounded-md text-white text-sm mb-2 border border-white/20 hover:bg-lightBlack hover:cursor-pointer"
                 >
-                  <p className="truncate w-[200px]">{item?.videoLink}</p>
+                  <p className="truncate w-[200px]">test</p>
                 </div>
               ))}
             </div>
