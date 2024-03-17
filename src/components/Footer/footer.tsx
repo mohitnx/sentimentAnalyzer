@@ -7,7 +7,7 @@ import {
   getSentiment,
 } from "../../api/dashboard/dashboardAPI";
 import { useNavigate } from "react-router-dom";
-import { addToHistory } from "../../store/chatHistory/chatHistory.reducer";
+import { addToHistory, currentRequest } from "../../store/chatHistory/chatHistory.reducer";
 
 const validationSchema = Yup.object({
   text: Yup.string()
@@ -81,7 +81,7 @@ const Footer = () => {
         commentCount: values.numberOfComments,
         analysis: message,
       };
-      dispatch(addToHistory(addToHistoryObject));
+      dispatch(currentRequest(addToHistoryObject));
     },
   });
 

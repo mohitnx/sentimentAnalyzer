@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { AuthDataType, loginUser, tempAPI } from "../../api/auth/authAPI";
+import { AuthDataType, loginUser } from "../../api/auth/authAPI";
 
 const validationSchema = yup.object({
   username: yup.string().required("Username is required"),
@@ -33,9 +33,9 @@ const LoginView = () => {
   });
 
   //testing only
-  const testingTempAPI = () => {
-    tempAPI();
-  };
+  // const testingTempAPI = () => {
+  //   tempAPI();
+  // };
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -86,7 +86,7 @@ const LoginView = () => {
                 </button>
               </div>
               {/* testing */}
-              <button onClick={testingTempAPI}>testing</button>
+              {/* <button onClick={testingTempAPI}>testing</button> */}
               {/* testing */}
               <div>
                 <div className="flex items-center justify-center">

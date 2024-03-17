@@ -7,6 +7,11 @@ export interface SentimentDataType {
   username: string;
 }
 
+export interface GetHisotryDataType {
+  username: any;
+}
+
+
 export const getSentiment = async (data: SentimentDataType) => {
   try {
     const response = await fetch(`${baseUrl}/senti/predict_sentiment`, {
@@ -33,6 +38,27 @@ export const getSentiment = async (data: SentimentDataType) => {
       return response.json();
     }
   } catch (error) {
-    alert("There was a problem with the sign up operation:" + error);
+    alert("There was a problem with sentiment analysis:" + error);
+  }
+};
+
+
+
+export const getHistory = async (data: GetHisotryDataType) => {
+  try {
+    const response = await fetch(`${baseUrl}/senti/get_history`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+      const temp = await response.json();
+      const dataToSend = temp.response;
+      console.log(dataToSend,'data to send')
+      return dataToSend
+
+    } catch (error) {
+    alert("There was a problem with while fetching history:" + error);
   }
 };
