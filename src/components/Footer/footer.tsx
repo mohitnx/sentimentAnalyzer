@@ -35,10 +35,7 @@ const Footer = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      if (
-        localStorage.getItem("isAuthenticated") !== "true" &&
-        localStorage.getItem("username") !== null
-      ) {
+      if (localStorage.getItem("isAuthenticated") !== "true") {
         alert("Please login first");
         navigate("/login", { replace: true });
         return;
