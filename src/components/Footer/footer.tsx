@@ -7,7 +7,8 @@ import {
   getSentiment,
 } from "../../api/dashboard/dashboardAPI";
 import { useNavigate } from "react-router-dom";
-import { addToHistory, currentRequest } from "../../store/chatHistory/chatHistory.reducer";
+import { currentRequest } from "../../store/chatHistory/chatHistory.reducer";
+import { generateAnalysisReport } from "../../utils/generateAnalysisReport";
 
 const validationSchema = Yup.object({
   text: Yup.string()
@@ -72,11 +73,10 @@ const Footer = () => {
         message = "Not enough data to reach a conclusion.";
       }
 
-      console.log(message);
       const addToHistoryObject = {
         videoLink: videoId,
         commentCount: values.numberOfComments,
-        analysis: message,
+        analysis: generateAnalysisReport(positive,negative,neutral),
       };
       dispatch(currentRequest(addToHistoryObject));
     },
@@ -140,3 +140,9 @@ const Footer = () => {
 };
 
 export default Footer;
+
+
+
+
+
+

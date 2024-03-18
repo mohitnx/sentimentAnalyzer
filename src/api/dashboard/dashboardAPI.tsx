@@ -55,10 +55,11 @@ export const getHistory = async (data: GetHisotryDataType) => {
     });
       const temp = await response.json();
       const dataToSend = temp.response;
-      console.log(dataToSend,'data to send')
       return dataToSend
 
     } catch (error) {
     alert("There was a problem with while fetching history:" + error);
   }
 };
+
+//AIzaSyDBD2XxnPKGsYsoZ6RS0Wu0f2UKS_fmxu0
