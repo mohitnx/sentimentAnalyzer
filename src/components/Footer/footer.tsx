@@ -3,13 +3,11 @@ import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
-  GetImageDataType,
   SentimentDataType,
-  getImage,
   getSentiment,
 } from "../../api/dashboard/dashboardAPI";
 import { useNavigate } from "react-router-dom";
-import { currentRequest } from "../../store/chatHistory/chatHistory.reducer";
+import { currentRequest, setComments, setLabels } from "../../store/chatHistory/chatHistory.reducer";
 import { generateAnalysisReport } from "../../utils/generateAnalysisReport";
 
 const validationSchema = Yup.object({
@@ -29,7 +27,7 @@ const Footer = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
-
+const [selectedOption, setSelectedOption] = useState("svc");
   const formik = useFormik({
     initialValues: {
       text: "",
@@ -41,6 +39,10 @@ const Footer = () => {
       if (localStorage.getItem("isAuthenticated") !== "true") {
         alert("Please login first");
         navigate("/login", { replace: true });
+        return;
+      }
+      if (selectedOption === "") {
+        setErrorMessage("Please select an option");
         return;
       }
       let videoId = null;
@@ -69,12 +71,19 @@ const Footer = () => {
         analysis: generateAnalysisReport(positive,negative,neutral),
       };
       dispatch(currentRequest(addToHistoryObject));
+      dispatch(setComments(response.comments));
+      dispatch(setLabels(response.predicted_labels));
     },
   });
 
   const handleTextChange = (event: any) => {
     formik.handleChange(event);
     setErrorMessage("");
+  };
+
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedOption(event.target.value);
+    setErrorMessage(""); 
   };
 
   return (
@@ -116,6 +125,29 @@ const Footer = () => {
           {formik.errors.numberOfComments && (
             <p className="text-red-500">{formik.errors.numberOfComments}</p>
           )}
+             <div className="flex flex-col gap-1 text-white mb-3">
+              <div>Please select a model to use for analysing comments</div>
+            <label className="flex gap-3  items-center">
+              <input
+                type="radio"
+                name="sentiment"
+                value="svc"
+                checked={selectedOption === "svc"}
+                onChange={handleRadioChange}
+              />
+              Support Vector Machine
+            </label>
+            <label className="flex gap-3 items-center">
+              <input
+                type="radio"
+                name="sentiment"
+                value="nb"
+                checked={selectedOption === "nb"}
+                onChange={handleRadioChange}
+              />
+              Naive Bayes
+            </label>
+          </div>
           <button
             type="submit"
             className="p-4 text-white bg-blue-500 hover:bg-blue-700 rounded-md"

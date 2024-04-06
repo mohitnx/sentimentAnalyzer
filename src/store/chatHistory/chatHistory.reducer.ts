@@ -5,8 +5,16 @@ export interface HistoryState {
   commentCount?: number | null;
   analysis: string;
 }
+
+export interface CommentsDetailsType {
+  comments:string[]
+  labels:string[]
+}
+
 export interface HistoryStateList {
   activeRequest: HistoryState;
+  comments: string[]
+  labels: string[]
 }
 
 const initialState: HistoryStateList = {
@@ -15,6 +23,9 @@ const initialState: HistoryStateList = {
     commentCount: null,
     analysis: "",
   },
+
+  comments:[],
+  labels:[]
 };
 
 export const chatHistorySlice = createSlice({
@@ -24,8 +35,15 @@ export const chatHistorySlice = createSlice({
     currentRequest: (state, action: PayloadAction<any>) => {
       state.activeRequest = action.payload;
     },
+  
+  setComments: (state, action: PayloadAction<any>) => {
+    state.comments = action.payload;
   },
+  setLabels: (state, action: PayloadAction<any>) => {
+    state.labels = action.payload;
+  },
+  }
 });
 
-export const {  currentRequest } = chatHistorySlice.actions;
+export const {  currentRequest,setComments,setLabels } = chatHistorySlice.actions;
 export default chatHistorySlice.reducer;
