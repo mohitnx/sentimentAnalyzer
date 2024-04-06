@@ -11,6 +11,10 @@ export interface GetHisotryDataType {
   username: any;
 }
 
+export interface GetImageDataType {
+  image_name: string;
+}
+
 
 export const getSentiment = async (data: SentimentDataType) => {
   try {
@@ -43,7 +47,6 @@ export const getSentiment = async (data: SentimentDataType) => {
 };
 
 
-
 export const getHistory = async (data: GetHisotryDataType) => {
   try {
     const response = await fetch(`${baseUrl}/senti/get_history`, {
@@ -61,5 +64,34 @@ export const getHistory = async (data: GetHisotryDataType) => {
     alert("There was a problem with while fetching history:" + error);
   }
 };
+
+
+export const getImage = async (data: GetImageDataType) => {
+  try {
+    const response = await fetch(`${baseUrl}/senti/get_image`
+    , {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+    );
+    if (response.ok) {
+      // reading image data as ArrayBuffer
+      const imageBuffer = await response.arrayBuffer();
+      // creating Blob object from ArrayBuffer
+      const blob = new Blob([imageBuffer], { type: "image/jpeg" });
+      // creating object URL from blob
+      const imageUrl = URL.createObjectURL(blob);
+      return imageUrl;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    } catch (error) {
+    alert("There was a problem with while fetching history:" + error);
+  }
+};
+
 
 //AIzaSyDBD2XxnPKGsYsoZ6RS0Wu0f2UKS_fmxu0

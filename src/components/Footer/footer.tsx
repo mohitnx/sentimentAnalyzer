@@ -3,7 +3,9 @@ import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
+  GetImageDataType,
   SentimentDataType,
+  getImage,
   getSentiment,
 } from "../../api/dashboard/dashboardAPI";
 import { useNavigate } from "react-router-dom";
@@ -57,21 +59,9 @@ const Footer = () => {
         username: localStorage.getItem("username") as string,
       };
       const response = await getSentiment(data);
-      console.log(response, "api response");
-      let message = "";
       const positive = parseInt(response.Positive) || 0;
       const negative = parseInt(response.Negative) || 0;
       const neutral = parseInt(response.Neutral) || 0;
-
-      if (positive > negative + neutral) {
-        message = "The video is mostly positive.";
-      } else if (negative > positive + neutral) {
-        message = "The video response in the comments is mostly negative.";
-      } else if (neutral > positive + negative) {
-        message = "The video has a neutral response.";
-      } else {
-        message = "Not enough data to reach a conclusion.";
-      }
 
       const addToHistoryObject = {
         videoLink: videoId,

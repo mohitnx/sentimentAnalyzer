@@ -3,6 +3,7 @@ import Login from "../pages/Auth/Login";
 import NotFound from "../pages/NotFound/NotFound";
 import Dashboard from "../pages/Main/Dashboard";
 import Register from "../pages/Auth/Register";
+import SentimentDetails from "../components/sentimentDetails/sentimentDetails";
 
 
 const Router = () => {
@@ -23,6 +24,13 @@ const Router = () => {
           path="/register"
           element={
             <Register />
+          }
+        />
+
+        <Route
+          path="/sentiment-details"
+          element={
+            <SentimentDetails />
           }
         />
 
