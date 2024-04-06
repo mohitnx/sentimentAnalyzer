@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -7,8 +7,8 @@ import {
   getSentiment,
 } from "../../api/dashboard/dashboardAPI";
 import { useNavigate } from "react-router-dom";
-import { currentRequest, setComments, setLabels } from "../../store/chatHistory/chatHistory.reducer";
 import { generateAnalysisReport } from "../../utils/generateAnalysisReport";
+import { currentRequest } from "../../store/chatHistory/chatHistory.reducer";
 
 const validationSchema = Yup.object({
   text: Yup.string()
@@ -26,8 +26,9 @@ const validationSchema = Yup.object({
 const Footer = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [errorMessage, setErrorMessage] = useState("");
-const [selectedOption, setSelectedOption] = useState("svc");
+const [selectedOption, setSelectedOption] = useState("model1");
   const formik = useFormik({
     initialValues: {
       text: "",
@@ -59,6 +60,7 @@ const [selectedOption, setSelectedOption] = useState("svc");
         apiKey: values.apiKey,
         numberofcomments: values.numberOfComments.toString(),
         username: localStorage.getItem("username") as string,
+        model:selectedOption
       };
       const response = await getSentiment(data);
       const positive = parseInt(response.Positive) || 0;
@@ -67,13 +69,13 @@ const [selectedOption, setSelectedOption] = useState("svc");
 
       const addToHistoryObject = {
         videoLink: videoId,
-        commentCount: values.numberOfComments,
-        analysis: generateAnalysisReport(positive,negative,neutral),
+        commentCount: positive+negative+neutral,
+        analysis: generateAnalysisReport(positive,negative,neutral, response.model_used),
+        modelUsed: response.model_used
       };
       dispatch(currentRequest(addToHistoryObject));
-      dispatch(setComments(response.comments));
-      dispatch(setLabels(response.predicted_labels));
     },
+    
   });
 
   const handleTextChange = (event: any) => {
@@ -83,8 +85,12 @@ const [selectedOption, setSelectedOption] = useState("svc");
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedOption(event.target.value);
+    console.log(selectedOption,'radio')
     setErrorMessage(""); 
   };
+
+  useEffect(() => {
+  }, [selectedOption]);
 
   return (
     <div className="absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent bg-gray-800 md:!bg-transparent">
@@ -131,8 +137,8 @@ const [selectedOption, setSelectedOption] = useState("svc");
               <input
                 type="radio"
                 name="sentiment"
-                value="svc"
-                checked={selectedOption === "svc"}
+                value="model1"
+                checked={selectedOption === "model1"}
                 onChange={handleRadioChange}
               />
               Support Vector Machine
@@ -141,8 +147,8 @@ const [selectedOption, setSelectedOption] = useState("svc");
               <input
                 type="radio"
                 name="sentiment"
-                value="nb"
-                checked={selectedOption === "nb"}
+                value="model2"
+                checked={selectedOption === "model2"}
                 onChange={handleRadioChange}
               />
               Naive Bayes
@@ -157,6 +163,7 @@ const [selectedOption, setSelectedOption] = useState("svc");
         </div>
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
       </form>
+     
     </div>
   );
 };

@@ -5,6 +5,7 @@ export interface SentimentDataType {
   apiKey: string;
   numberofcomments: string;
   username: string;
+  model: string;
 }
 
 export interface GetHisotryDataType {
@@ -89,7 +90,7 @@ export const getImage = async (data: GetImageDataType) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     } catch (error) {
-    alert("There was a problem with while fetching history:" + error);
+    alert("There was a problem with while fetching image:" + error);
   }
 };
 

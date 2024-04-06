@@ -13,6 +13,7 @@ interface HisotryReuslt {
   positive: string;
   negative: string;
   neutral: string;
+  model_choice: string;
 }
 
 
@@ -22,11 +23,14 @@ const LeftSection = () => {
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState<number | null>(null); // State to keep track of selected item index
   const handleIndividualRequest = (index: number, current: HisotryReuslt) => {
-    setSelectedItem(index); // Set the selected item index
+    setSelectedItem(index);
     const addToHistoryObject = {
       videoLink: current?.videoid,
-      analysis: generateAnalysisReport( parseInt(current?.positive),  parseInt(current?.negative), parseInt(current?.neutral)),
+      analysis: generateAnalysisReport( parseInt(current?.positive),  parseInt(current?.negative), parseInt(current?.neutral), current?.model_choice),
+      commentCount: parseInt(current?.positive) +parseInt(current?.negative)+parseInt(current?.neutral),
+      modelUsed: current?.model_choice
     };
+    console.log(addToHistoryObject,'left section')
     dispatch(currentRequest(addToHistoryObject));
   };
   const handleLogout = () => {
@@ -54,7 +58,7 @@ const LeftSection = () => {
   }, [addToHistoryObject]);
 
   return (
-    <div className="bg-black md:fixed md:inset-y-0 md:flex md:w-[260px] md:flex-col">
+    <div className="bg-black md:fixed md:inset-y-0 md:flex md:w-[260px] md:flex-col ">
       <div className="flex h-full min-h-0 flex-col">
         <div className="scrollbar-trigger flex h-full w-full flex-1 items-start border-white/20">
           <nav className="flex h-full flex-1 flex-col space-y-1 p-2">

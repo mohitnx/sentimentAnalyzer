@@ -4,17 +4,14 @@ export interface HistoryState {
   videoLink: string;
   commentCount?: number | null;
   analysis: string;
+  modelUsed: string;
 }
 
-export interface CommentsDetailsType {
-  comments:string[]
-  labels:string[]
-}
 
 export interface HistoryStateList {
   activeRequest: HistoryState;
-  comments: string[]
-  labels: string[]
+
+  
 }
 
 const initialState: HistoryStateList = {
@@ -22,10 +19,8 @@ const initialState: HistoryStateList = {
     videoLink: "",
     commentCount: null,
     analysis: "",
+    modelUsed: ''
   },
-
-  comments:[],
-  labels:[]
 };
 
 export const chatHistorySlice = createSlice({
@@ -36,14 +31,9 @@ export const chatHistorySlice = createSlice({
       state.activeRequest = action.payload;
     },
   
-  setComments: (state, action: PayloadAction<any>) => {
-    state.comments = action.payload;
-  },
-  setLabels: (state, action: PayloadAction<any>) => {
-    state.labels = action.payload;
-  },
+
   }
 });
 
-export const {  currentRequest,setComments,setLabels } = chatHistorySlice.actions;
+export const {  currentRequest } = chatHistorySlice.actions;
 export default chatHistorySlice.reducer;
